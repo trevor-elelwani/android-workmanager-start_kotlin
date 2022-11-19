@@ -42,16 +42,12 @@ class BlurViewModel(application: Application) : ViewModel() {
         imageUri = getImageUri(application.applicationContext)
         outputWorkInfos = workManager.getWorkInfosByTagLiveData(TAG_OUTPUT)
     }
+
     /**
      * Create the WorkRequest to apply the blur and save the resulting image
      * @param blurLevel The amount to blur the image
      */
     internal fun applyBlur(blurLevel: Int) {
-
-        //var  continuation = workManager
-        //  .beginWith(OneTimeWorkRequest
-        //    .from(CleanupWorker::class.java))
-
 
         var continuation = workManager
             .beginUniqueWork(
@@ -78,23 +74,16 @@ class BlurViewModel(application: Application) : ViewModel() {
             .setConstraints(constraints)
             .addTag(TAG_OUTPUT)
             .build()
-        continuation.enqueue()
-
 
         continuation = continuation.then(save)
 
+        // start work
         continuation.enqueue()
-        //workManager.enqueue
-
-
     }
-
 
     internal fun cancelWork() {
         workManager.cancelUniqueWork(IMAGE_MANIPULATION_WORK_NAME)
     }
-
-
 
     private fun createInputDataForUri(): Data {
         val builder = Data.Builder()
