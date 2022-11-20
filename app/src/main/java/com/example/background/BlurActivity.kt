@@ -16,7 +16,6 @@
 
 package com.example.background
 
-import android.annotation.SuppressLint
 import android.content.Intent
 import android.os.Bundle
 import android.view.View
@@ -35,17 +34,13 @@ class BlurActivity : AppCompatActivity() {
     }
     private lateinit var binding: ActivityBlurBinding
 
-    @SuppressLint("QueryPermissionsNeeded")
     override fun onCreate(savedInstanceState: Bundle?) {
         super.onCreate(savedInstanceState)
         binding = ActivityBlurBinding.inflate(layoutInflater)
         setContentView(binding.root)
 
-
         binding.goButton.setOnClickListener { viewModel.applyBlur(blurLevel) }
-
         binding.cancelButton.setOnClickListener { viewModel.cancelWork() }
-
         viewModel.outputWorkInfos.observe(this, workInfosObserver())
 
         binding.seeFileButton.setOnClickListener {
@@ -65,12 +60,11 @@ class BlurActivity : AppCompatActivity() {
             }
 
             val workInfo = listOfWorkInfo[0]
-
             if (workInfo.state.isFinished) {
                 showWorkFinished()
-                val outputImageUri = workInfo.outputData.getString(KEY_IMAGE_URI)
 
-                if(!outputImageUri.isNullOrEmpty()) {
+                val outputImageUri = workInfo.outputData.getString(KEY_IMAGE_URI)
+                if (!outputImageUri.isNullOrEmpty()) {
                     viewModel.setOutputUri(outputImageUri)
                     binding.seeFileButton.visibility = View.VISIBLE
                 }
